@@ -1,10 +1,10 @@
 const Gameboard = (function () {
-  // private data
-  const board = Array(9).fill(null); // 0..8
+  //private data 
+  const board = Array(9).fill(null);
 
-  // public methods
+  //public methods
   function getBoard() {
-    return board.slice(); // return a copy so external code can't mutate directly
+    return board.slice(); // return a copy so external code can't mutate externally
   }
 
   function setCell(index, marker) {
@@ -21,79 +21,87 @@ const Gameboard = (function () {
   return { getBoard, setCell, reset };
 })();
 
-//Player factory
-function createPlayer(name, marker) {
-  // marker: 'X' or 'O'
-  return {
-    name,
-    marker
-  };
-}
-
-const player1 = createPlayer('You', 'X');
-const player2 = createPlayer('Computer', 'O');
-
-console.log(player1);
-console.log(player2);
-
-//Display controller (rendering logic)
-const DisplayController = (function () {
-  const boardEl = document.querySelector('.board');
-
-  function render() {
-    boardEl.innerHTML = ''; // clear previous render
-    const b = Gameboard.getBoard();
-
-    b.forEach((cell, idx) => {
-      const cellEl = document.createElement('div');
-      cellEl.className = 'cell';
-      cellEl.dataset.index = idx;
-      cellEl.textContent = cell ? cell : ''; // show marker or empty
-      boardEl.appendChild(cellEl);
-    });
-  }
-
-  return { render };
-})();
-
-DisplayController.render();
 
 
-//Game controller module (flow control)
-const GameController = (function () {
-  let players = [];
-  let current = 0; // index of current player
 
-  function start(p1, p2) {
-    players = [p1, p2];
-    current = 0;
-    Gameboard.reset();
-    DisplayController.render();
-    attachListeners();
-  }
 
-  function attachListeners() {
-    const boardEl = document.querySelector('.board');
-    // delegate clicks to the board container
-    boardEl.addEventListener('click', handleBoardClick);
-  }
 
-  function handleBoardClick(e) {
-    const idx = Number(e.target.dataset.index);
-    if (Number.isInteger(idx)) {
-      const success = Gameboard.setCell(idx, players[current].marker);
-      if (!success) return; // cell taken or invalid
 
-      DisplayController.render();
-      // TODO: check for win/draw here (later)
-      // switch turn
-      current = 1 - current;
-    }
-  }
 
-  return { start };
-})();
 
-const newGameBtn = document.querySelector('#new-game').addEventListener('click', () => {
-  GameController.start(player1, player2);
-});
+// //Player factory
+// function createPlayer(name, marker) {
+//   // marker: 'X' or 'O'
+//   return {
+//     name,
+//     marker
+//   };
+// }
+
+// const player1 = createPlayer('You', 'X');
+// const player2 = createPlayer('Computer', 'O');
+
+// console.log(player1);
+// console.log(player2);
+
+// //Display controller (rendering logic)
+// const DisplayController = (function () {
+//   const boardEl = document.querySelector('.board');
+
+//   function render() {
+//     boardEl.innerHTML = ''; // clear previous render
+//     const b = Gameboard.getBoard;
+
+//     b.forEach((cell, idx) => {
+//       const cellEl = document.createElement('div');
+//       cellEl.className = 'cell';
+//       cellEl.dataset.index = idx;
+//       cellEl.textContent = cell ? cell : ''; // show marker or empty
+//       boardEl.appendChild(cellEl);
+//     });
+//   }
+
+//   return { render };
+// })();
+
+// DisplayController.render();
+
+
+// //Game controller module (flow control)
+// const GameController = (function () {
+//   let players = [];
+//   let current = 0; // index of current player
+
+//   function start(p1, p2) {
+//     players = [p1, p2];
+//     current = 0;
+//     Gameboard.reset();
+//     DisplayController.render();
+//     attachListeners();
+//   }
+
+//   function attachListeners() {
+//     const boardEl = document.querySelector('.board');
+//     // delegate clicks to the board container
+//     boardEl.addEventListener('click', handleBoardClick);
+//   }
+
+//   function handleBoardClick(e) {
+//     const idx = Number(e.target.dataset.index);
+//     if (Number.isInteger(idx)) {
+//       const success = Gameboard.setCell(idx, players[current].marker);
+//       if (!success) return; // cell taken or invalid
+
+//       DisplayController.render();
+//       // TODO: check for win/draw here (later)
+//       // switch turn
+//       current = 1 - current;
+//     }
+//   }
+
+//   return { start };
+// })();
+
+// const newGameBtn = document.querySelector('#new-game').addEventListener('click', () => {
+//   GameController.start(player1, player2);
+// });
