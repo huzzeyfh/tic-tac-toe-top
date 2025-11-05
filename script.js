@@ -1,4 +1,6 @@
+// Gameboard module 
 const Gameboard = (function () {
+
   //private data 
   const board = Array(9).fill(null);
 
@@ -21,6 +23,15 @@ const Gameboard = (function () {
   return { getBoard, setCell, reset };
 })();
 
+// Player factory
+function createPlayer(name, marker) {
+
+  // marker: 'X' or 'O'
+  return {
+    name,
+    marker
+  };
+}
 
 
 
