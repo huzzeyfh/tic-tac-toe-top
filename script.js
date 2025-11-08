@@ -34,6 +34,7 @@ function createPlayer(name, marker) {
   };
 }
 
+// DisplayRenderer to separating concerns between data and UI
 const DisplayController = (function () {
   const boardEl= document.querySelector('.board');
 
@@ -53,36 +54,11 @@ const DisplayController = (function () {
   return { render };
 })();
 
-
-
-
-
-
-
-
-
-
-// //Display controller (rendering logic)
-// const DisplayController = (function () {
-//   const boardEl = document.querySelector('.board');
-
-//   function render() {
-//     boardEl.innerHTML = ''; // clear previous render
-//     const b = Gameboard.getBoard;
-
-//     b.forEach((cell, idx) => {
-//       const cellEl = document.createElement('div');
-//       cellEl.className = 'cell';
-//       cellEl.dataset.index = idx;
-//       cellEl.textContent = cell ? cell : ''; // show marker or empty
-//       boardEl.appendChild(cellEl);
-//     });
-//   }
-
-//   return { render };
-// })();
-
-// DisplayController.render();
+const newGame = document.querySelector('#new-game').addEventListener('click', () => {
+  DisplayController.render();
+  player1 = createPlayer('User', 'X');
+  player2 = createPlayer('Computer', 'O');
+})
 
 
 // //Game controller module (flow control)
