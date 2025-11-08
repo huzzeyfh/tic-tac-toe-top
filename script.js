@@ -41,7 +41,7 @@ const DisplayController = (function () {
 
     b.forEach((cell, idx) => {
       const cellEl = document.createElement("div");
-      cellEl.classname = "cell";
+      cellEl.className = "cell";
       cellEl.dataset.index = idx;
       cellEl.textContent = cell ? cell : ""; // show marker or empty
       boardEl.appendChild(cellEl);
@@ -68,9 +68,9 @@ const NewGame = (function () {
     DisplayController.render();
   });
 
-
-
 })();
+
+
 
 // //Game controller module (flow control)
 // const GameController = (function () {
