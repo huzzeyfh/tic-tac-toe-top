@@ -1,7 +1,6 @@
-// Gameboard module 
+// Gameboard module
 const Gameboard = (function () {
-
-  //private data 
+  //private data
   const board = Array(9).fill(null);
 
   //public methods
@@ -23,43 +22,55 @@ const Gameboard = (function () {
   return { getBoard, setCell, reset };
 })();
 
-
 // Player factory
 function createPlayer(name, marker) {
-
   // marker: 'X' or 'O'
   return {
     name,
-    marker
+    marker,
   };
 }
 
 // DisplayRenderer to separating concerns between data and UI
 const DisplayController = (function () {
-  const boardEl= document.querySelector('.board');
+  const boardEl = document.querySelector(".board");
 
   function render() {
-    boardEl.innerHTML = ''; // clear previous render 
+    boardEl.innerHTML = ""; // clear previous render
     const b = Gameboard.getBoard();
 
     b.forEach((cell, idx) => {
-      const cellEl = document.createElement('div');
-      cellEl.classname = 'cell';
+      const cellEl = document.createElement("div");
+      cellEl.classname = "cell";
       cellEl.dataset.index = idx;
-      cellEl.textContent = cell ? cell : ''; // show marker or empty
+      cellEl.textContent = cell ? cell : ""; // show marker or empty
       boardEl.appendChild(cellEl);
-    })
+    });
   }
 
   return { render };
 })();
 
-const newGame = document.querySelector('#new-game').addEventListener('click', () => {
-  DisplayController.render();
-  player1 = createPlayer('User', 'X');
-  player2 = createPlayer('Computer', 'O');
-})
+const NewGame = (function () {
+  const newGame = document.querySelector("#new-game");
+  const reset = document.querySelector("#reset");
 
+  newGame.addEventListener("click", () => {
+    newGame.textContent = "Reset";
+    newGame.id = "reset";
+    DisplayController.render();
+    player1 = createPlayer("User", "X");
+    player2 = createPlayer("Computer", "O");
+  });
+
+  reset.addEventListener("click", () => {
+    Gameboard.reset();
+    DisplayController.render();
+  });
+
+
+
+})();
 
 // //Game controller module (flow control)
 // const GameController = (function () {
