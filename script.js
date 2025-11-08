@@ -23,6 +23,7 @@ const Gameboard = (function () {
   return { getBoard, setCell, reset };
 })();
 
+
 // Player factory
 function createPlayer(name, marker) {
 
@@ -33,6 +34,24 @@ function createPlayer(name, marker) {
   };
 }
 
+const DisplayController = (function () {
+  const boardEl= document.querySelector('.board');
+
+  function render() {
+    boardEl.innerHTML = ''; // clear previous render 
+    const b = Gameboard.getBoard();
+
+    b.forEach((cell, idx) => {
+      const cellEl = document.createElement('div');
+      cellEl.classname = 'cell';
+      cellEl.dataset.index = idx;
+      cellEl.textContent = cell ? cell : ''; // show marker or empty
+      boardEl.appendChild(cellEl);
+    })
+  }
+
+  return { render };
+})();
 
 
 
@@ -40,20 +59,8 @@ function createPlayer(name, marker) {
 
 
 
-// //Player factory
-// function createPlayer(name, marker) {
-//   // marker: 'X' or 'O'
-//   return {
-//     name,
-//     marker
-//   };
-// }
 
-// const player1 = createPlayer('You', 'X');
-// const player2 = createPlayer('Computer', 'O');
 
-// console.log(player1);
-// console.log(player2);
 
 // //Display controller (rendering logic)
 // const DisplayController = (function () {
