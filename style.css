@@ -1,6 +1,14 @@
 body {
     height: 100vh;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+h1 {
+    font-size: 2.5rem;
 }
 
 .board {
@@ -11,6 +19,20 @@ body {
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
     gap: 2px;
+}
+
+.controls {
+    margin-top: 2rem;
+}
+
+.controls > #reset {
+    display: none;
+}
+
+.turn {
+    display: none;
+    margin-top: 1rem;
+    font-size: 2rem;
 }
 
 .cell {

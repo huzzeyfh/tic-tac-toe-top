@@ -1,4 +1,4 @@
-// Gameboard module
+//Board module
 const Gameboard = (function () {
   //private data
   const board = Array(9).fill(null);
@@ -22,6 +22,7 @@ const Gameboard = (function () {
   return { getBoard, setCell, reset };
 })();
 
+
 // Player factory
 function createPlayer(name, marker) {
   // marker: 'X' or 'O'
@@ -30,6 +31,7 @@ function createPlayer(name, marker) {
     marker,
   };
 }
+
 
 // DisplayRenderer to separating concerns between data and UI
 const DisplayController = (function () {
@@ -54,21 +56,36 @@ const DisplayController = (function () {
 
 //Game controller module (flow control)
 const GameController = (function () {
-  let players = [];
+  const newGameBtn = document.querySelector("#new-game");
+  const resetBtn = document.querySelector("#reset");
+  const turnEl = document.querySelector(".turn");
+  const players = [createPlayer("User", "X"), createPlayer("Computer", "O")];
   let current = 0; // index of current player
 
-  function start(p1, p2) {
-    players = [p1, p2];
+  function init() {
+    newGameBtn.addEventListener("click", start);
+    resetBtn.addEventListener("click", reset);
+  }
+
+  function start() {
+    newGameBtn.style.display = "none";
+    resetBtn.style.display = "block";
+    turnEl.style.display = "block";
+    Gameboard.reset();
+    DisplayController.render();
+    turnEl.textContent = `${players[current].name}'s Turn (${players[current].marker})`;
+    attachBoardListeners();
+  }
+
+  function reset() {
     current = 0;
     Gameboard.reset();
     DisplayController.render();
-    attachListeners();
+    turnEl.textContent = `${players[current].name}'s Turn (${players[current].marker})`;
   }
 
-  function attachListeners() {
-    const boardEl = document.querySelector(".board");
-    // delegate clicks to the board container
-    boardEl.addEventListener("click", handleBoardClick);
+  function attachBoardListeners() {
+    document.querySelector(".board").addEventListener("click", handleBoardClick);
   }
 
   function handleBoardClick(e) {
@@ -81,32 +98,12 @@ const GameController = (function () {
       // TODO: check for win/draw here (later)
       // switch turn
       current = 1 - current;
+      turnEl.textContent = `${players[current].name}'s Turn (${players[current].marker})`;
     }
   }
 
-  return { start };
+  return { init };
 })();
 
 
-//NewGame button
-const NewGame = (function () {
-  const newGame = document.querySelector("#new-game");
-  const reset = document.querySelector("#reset");
-  const player1 = createPlayer("User", "X");
-  const player2 = createPlayer("Computer", "O");
-
-  newGame.addEventListener("click", () => {
-    newGame.textContent = "Reset";
-    newGame.id = "reset";
-    DisplayController.render();
-    createPlayer("User", "X");
-    createPlayer("Computer", "O");
-    GameController.start(player1, player2);
-  });
-
-  reset.addEventListener("click", () => {
-    Gameboard.reset();
-    DisplayController.render();
-  });
-
-})();
+GameController.init();
