@@ -51,16 +51,57 @@ const DisplayController = (function () {
   return { render };
 })();
 
+
+//Game controller module (flow control)
+const GameController = (function () {
+  let players = [];
+  let current = 0; // index of current player
+
+  function start(p1, p2) {
+    players = [p1, p2];
+    current = 0;
+    Gameboard.reset();
+    DisplayController.render();
+    attachListeners();
+  }
+
+  function attachListeners() {
+    const boardEl = document.querySelector(".board");
+    // delegate clicks to the board container
+    boardEl.addEventListener("click", handleBoardClick);
+  }
+
+  function handleBoardClick(e) {
+    const idx = Number(e.target.dataset.index);
+    if (Number.isInteger(idx)) {
+      const success = Gameboard.setCell(idx, players[current].marker);
+      if (!success) return; // cell taken or invalid
+
+      DisplayController.render();
+      // TODO: check for win/draw here (later)
+      // switch turn
+      current = 1 - current;
+    }
+  }
+
+  return { start };
+})();
+
+
+//NewGame button
 const NewGame = (function () {
   const newGame = document.querySelector("#new-game");
   const reset = document.querySelector("#reset");
+  const player1 = createPlayer("User", "X");
+  const player2 = createPlayer("Computer", "O");
 
   newGame.addEventListener("click", () => {
     newGame.textContent = "Reset";
     newGame.id = "reset";
     DisplayController.render();
-    player1 = createPlayer("User", "X");
-    player2 = createPlayer("Computer", "O");
+    createPlayer("User", "X");
+    createPlayer("Computer", "O");
+    GameController.start(player1, player2);
   });
 
   reset.addEventListener("click", () => {
@@ -69,44 +110,3 @@ const NewGame = (function () {
   });
 
 })();
-
-
-
-// //Game controller module (flow control)
-// const GameController = (function () {
-//   let players = [];
-//   let current = 0; // index of current player
-
-//   function start(p1, p2) {
-//     players = [p1, p2];
-//     current = 0;
-//     Gameboard.reset();
-//     DisplayController.render();
-//     attachListeners();
-//   }
-
-//   function attachListeners() {
-//     const boardEl = document.querySelector('.board');
-//     // delegate clicks to the board container
-//     boardEl.addEventListener('click', handleBoardClick);
-//   }
-
-//   function handleBoardClick(e) {
-//     const idx = Number(e.target.dataset.index);
-//     if (Number.isInteger(idx)) {
-//       const success = Gameboard.setCell(idx, players[current].marker);
-//       if (!success) return; // cell taken or invalid
-
-//       DisplayController.render();
-//       // TODO: check for win/draw here (later)
-//       // switch turn
-//       current = 1 - current;
-//     }
-//   }
-
-//   return { start };
-// })();
-
-// const newGameBtn = document.querySelector('#new-game').addEventListener('click', () => {
-//   GameController.start(player1, player2);
-// });
