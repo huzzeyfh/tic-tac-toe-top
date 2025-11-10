@@ -125,19 +125,16 @@ const GameChecker = (function () {
     for (let pattern of winPatterns) {
       const [a, b, c] = pattern;
       if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        console.log(board[a]);
         return board[a]; // return 'X' or 'O'
       }
     }
 
     // If no winner and no empty cells left, then it's a draw
     if (board.every(cell => cell !== null)) {
-      console.log("draw")
       return "draw";
     }
 
     // Otherwise, game still ongoing
-    console.log("continue...");
     return null;
   }
 
