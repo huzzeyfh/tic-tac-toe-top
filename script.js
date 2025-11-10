@@ -22,7 +22,6 @@ const Gameboard = (function () {
   return { getBoard, setCell, reset };
 })();
 
-
 // Player factory
 function createPlayer(name, marker) {
   // marker: 'X' or 'O'
@@ -32,16 +31,15 @@ function createPlayer(name, marker) {
   };
 }
 
-
 // DisplayRenderer to separating concerns between data and UI
 const DisplayController = (function () {
   const boardEl = document.querySelector(".board");
 
   function render() {
     boardEl.innerHTML = ""; // clear previous render
-    const b = Gameboard.getBoard();
+    const board = Gameboard.getBoard();
 
-    b.forEach((cell, idx) => {
+    board.forEach((cell, idx) => {
       const cellEl = document.createElement("div");
       cellEl.className = "cell";
       cellEl.dataset.index = idx;
@@ -52,7 +50,6 @@ const DisplayController = (function () {
 
   return { render };
 })();
-
 
 //Game controller module (flow control)
 const GameController = (function () {
@@ -85,7 +82,9 @@ const GameController = (function () {
   }
 
   function attachBoardListeners() {
-    document.querySelector(".board").addEventListener("click", handleBoardClick);
+    document
+      .querySelector(".board")
+      .addEventListener("click", handleBoardClick);
   }
 
   function handleBoardClick(e) {
@@ -95,7 +94,7 @@ const GameController = (function () {
       if (!success) return; // cell taken or invalid
 
       DisplayController.render();
-      // TODO: check for win/draw here (later)
+      GameChecker.check();
       // switch turn
       current = 1 - current;
       turnEl.textContent = `${players[current].name}'s Turn (${players[current].marker})`;
@@ -105,5 +104,44 @@ const GameController = (function () {
   return { init };
 })();
 
+
+// WinnerChecker
+const GameChecker = (function () {
+  const winPatterns = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  function check(){
+    const board = Gameboard.getBoard();
+
+    // for..of
+    for (let pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        console.log(board[a]);
+        return board[a]; // return 'X' or 'O'
+      }
+    }
+
+    // If no winner and no empty cells left, then it's a draw
+    if (board.every(cell => cell !== null)) {
+      console.log("draw")
+      return "draw";
+    }
+
+    // Otherwise, game still ongoing
+    console.log("continue...");
+    return null;
+  }
+
+  return { check };
+})();
 
 GameController.init();
