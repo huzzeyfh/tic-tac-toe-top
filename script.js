@@ -223,12 +223,12 @@ function ScreenController() {
 
     board.forEach((row, cellRow) => {
       row.forEach((cell, cellCol) => {
-          const cellButton = document.createElement("button");
-          cellButton.classList.add("cell");
-          cellButton.dataset.row = cellRow;
-          cellButton.dataset.col = cellCol;
-          cellButton.textContent = cell.getValue();
-          boardDiv.appendChild(cellButton);
+        const cellButton = document.createElement("button");
+        cellButton.classList.add("cell");
+        cellButton.dataset.row = cellRow;
+        cellButton.dataset.col = cellCol;
+        cellButton.textContent = cell.getValue();
+        boardDiv.appendChild(cellButton);
       });
     });
   };
@@ -247,7 +247,12 @@ function ScreenController() {
   updateScreen();
 }
 
-ScreenController();
+function startGame() {
+  const startButton = document.getElementById("startButton");
+  startButton.addEventListener("click", ScreenController);
+}
+
+startGame();
 
 // //Kertas coretan
 //   //first try
