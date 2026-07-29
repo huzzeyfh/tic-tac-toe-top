@@ -203,6 +203,7 @@ function GameController(
   return { playRound, getActivePlayer };
 }
 
+//UI
 function ScreenController() {
   const game = GameController();
   const playerTurnDiv = document.createElement("div");
@@ -247,9 +248,13 @@ function ScreenController() {
   updateScreen();
 }
 
+//Start Game
 function startGame() {
   const startButton = document.getElementById("startButton");
-  startButton.addEventListener("click", ScreenController);
+  startButton.addEventListener("click", (e) => {
+    e.currentTarget.classList.add("hidden");
+    ScreenController();
+  });
 }
 
 startGame();
